@@ -10,3 +10,17 @@ jobs:
     steps:
       - name: Download ruffle-mirror
         run: wget -O /tmp/ruffle.tgz $(npm view @ruffle-rs/ruffle dist.tarball)
+      
+      - name: untar files
+        run: tar -xvzf /tmp/ruffle.tgz -C .
+      
+      - uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_S3_ENDPOINT: ${{ secrets.AWS_S3_ENDPOINT }}
+          SOURCE_DIR: 'package'
