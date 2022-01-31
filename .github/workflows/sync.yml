@@ -1,0 +1,12 @@
+name: Sync
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download ruffle-mirror
+        run: wget -O /tmp/ruffle.tgz $(npm view @ruffle-rs/ruffle dist.tarball)
